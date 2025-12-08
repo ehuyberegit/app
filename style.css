@@ -64,7 +64,7 @@ body, .main-bg {
     justify-content: center;
     position: relative;
     padding: 20px;
-    background-color: #F3B774;      /* ORANGE par défaut */
+    background-color: transparent;;      /* ORANGE par défaut */
     transition: background-color 0.3s;
 }
 /* On peut garder un fond global sur le body si tu veux */
@@ -453,16 +453,31 @@ body.theme-join {
         border-radius: 24px;
     }
 }
+/* --- THEME CONTROL --- */
 
-/* Theme classes */
 body.theme-standard {
     background-color: #F3B774 !important;
-    transition: background-color 0.3s;
 }
+
 body.theme-join {
     background-color: #8BF781 !important;
-    transition: background-color 0.3s;
 }
+
+/* la zone main doit suivre le body */
+body.theme-standard .main {
+    background-color: #F3B774 !important;
+}
+
+body.theme-join .main {
+    background-color: #8BF781 !important;
+}
+
+/* Ajuster le style du switch */
+body.theme-join .theme-switch {
+    border-color: #2E8B57;
+    color: #2E8B57;
+}
+
 
 /* Theme switch styles */
 .theme-switch-row {
