@@ -57,7 +57,6 @@ body, .main-bg {
 
 /* Main Section */
 .main {
-    background-color: #F3B774;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -65,6 +64,17 @@ body, .main-bg {
     justify-content: center;
     position: relative;
     padding: 20px;
+    background-color: #F3B774;      /* ORANGE par défaut */
+    transition: background-color 0.3s;
+}
+/* On peut garder un fond global sur le body si tu veux */
+body.theme-standard {
+    background-color: #F3B774 !important;
+    transition: background-color 0.3s;
+}
+body.theme-join {
+    background-color: #8BF781 !important;
+    transition: background-color 0.3s;
 }
 
 /* Title Section */
@@ -445,13 +455,13 @@ body, .main-bg {
 }
 
 /* Theme classes */
-.theme-standard {
-    background: #F3B774 !important;
-    transition: background 0.3s;
+body.theme-standard {
+    background-color: #F3B774 !important;
+    transition: background-color 0.3s;
 }
-.theme-join {
-    background: #8BF781 !important;
-    transition: background 0.3s;
+body.theme-join {
+    background-color: #8BF781 !important;
+    transition: background-color 0.3s;
 }
 
 /* Theme switch styles */
@@ -479,7 +489,7 @@ body, .main-bg {
     justify-content: center;
     user-select: none;
 }
-.theme-join .theme-switch {
+body.theme-join .theme-switch {
     border-color: #8BF781;
     color: #2E8B57;
 }
