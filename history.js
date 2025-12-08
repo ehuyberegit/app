@@ -6,13 +6,16 @@ function getTodayDate() {
     return `${year}-${month}-${day}`;
 }
 
-function getMonthDates(year, month) {
-    const dates = [];
-    const daysInMonth = new Date(year, month, 0).getDate();
-    for (let d = 1; d <= daysInMonth; d++) {
-        dates.push(`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
-    }
-    return dates;
+const MONTHS = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
+function getDaysInMonth(year, monthIndex) {
+    return new Date(year, monthIndex + 1, 0).getDate();
+}
+function formatDate(year, monthIndex, day) {
+    return `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -29,58 +32,96 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     const currentUser = data.user;
 
-    // Get current month
+    // DOM elements
+    const monthSelect = document.getElementById('monthSelect');
+    const currentMonthLabel = document.getElementById('currentMonthLabel');
+    const historyGrid = document.getElementById('historyGrid');
+    const historySummary = document.getElementById('historySummary');
+
+    // Setup month select
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const today = getTodayDate();
-    const monthDates = getMonthDates(year, month);
+    const currentYear = now.getFullYear();
+    let currentMonthIndex = now.getMonth();
 
-    // Load history
-    const { data: historyData, error: historyError } = await window.supabaseClient
-        .from('daily_counts')
-        .select('date, count')
-        .eq('user_id', currentUser.id)
-        .order('date', { ascending: true });
+    MONTHS.forEach((name, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = name;
+        if (idx === currentMonthIndex) opt.selected = true;
+        monthSelect.appendChild(opt);
+    });
 
-    const dateToCount = {};
-    let monthTotal = 0;
-    let todayCount = 0;
-    if (Array.isArray(historyData)) {
-        for (const row of historyData) {
-            if (monthDates.includes(row.date)) {
-                dateToCount[row.date] = row.count;
+    async function loadHistoryForMonth(year, monthIndex) {
+        const daysInMonth = getDaysInMonth(year, monthIndex);
+        const startDate = formatDate(year, monthIndex, 1);
+        const endDate = formatDate(year, monthIndex, daysInMonth);
+
+        const { data, error } = await window.supabaseClient
+            .from('daily_counts')
+            .select('date, count')
+            .eq('user_id', currentUser.id)
+            .gte('date', startDate)
+            .lte('date', endDate)
+            .order('date', { ascending: true });
+
+        const countsByDay = {};
+        let monthTotal = 0;
+        let todayCount = 0;
+        if (Array.isArray(data)) {
+            for (const row of data) {
+                const d = new Date(row.date).getDate();
+                countsByDay[d] = row.count;
                 monthTotal += row.count || 0;
+                // Today count
+                const today = new Date();
+                if (
+                    today.getFullYear() === year &&
+                    today.getMonth() === monthIndex &&
+                    today.getDate() === d
+                ) {
+                    todayCount = row.count || 0;
+                }
             }
-            if (row.date === today) {
-                todayCount = row.count || 0;
+        }
+        return { countsByDay, monthTotal, todayCount };
+    }
+
+    function renderHistoryGrid(year, monthIndex, countsByDay) {
+        const daysInMonth = getDaysInMonth(year, monthIndex);
+        historyGrid.innerHTML = '';
+        for (let d = 1; d <= daysInMonth; d++) {
+            const count = countsByDay[d] || 0;
+            const cell = document.createElement('div');
+            cell.className = 'day-cell';
+
+            const circle = document.createElement('div');
+            circle.className = 'day-circle' + (count > 0 ? ' day-circle--active' : '');
+            circle.textContent = d;
+
+            cell.appendChild(circle);
+
+            if (count > 0) {
+                const countDiv = document.createElement('div');
+                countDiv.className = 'day-count';
+                countDiv.textContent = count;
+                cell.appendChild(countDiv);
             }
+            historyGrid.appendChild(cell);
         }
     }
 
-    // Render grid
-    const historyGrid = document.getElementById('historyGrid');
-    if (historyGrid) {
-        historyGrid.innerHTML = '';
-        monthDates.forEach((date, idx) => {
-            const count = dateToCount[date] || 0;
-            const dayDiv = document.createElement('div');
-            dayDiv.className = 'history-day' + (count > 0 ? ' active' : '');
-            dayDiv.title = `${date}: ${count}`;
-            dayDiv.textContent = new Date(date).getDate();
-            if (count > 0) {
-                const countSpan = document.createElement('span');
-                countSpan.className = 'day-count';
-                countSpan.textContent = count;
-                dayDiv.appendChild(countSpan);
-            }
-            historyGrid.appendChild(dayDiv);
-        });
+    async function updateHistory(monthIndex) {
+        currentMonthLabel.textContent = `${MONTHS[monthIndex]} ${currentYear}`;
+        const { countsByDay, monthTotal, todayCount } = await loadHistoryForMonth(currentYear, monthIndex);
+        renderHistoryGrid(currentYear, monthIndex, countsByDay);
+        historySummary.textContent = `MONTH TOTAL : ${monthTotal}` + (monthIndex === (new Date()).getMonth() ? ` | TODAY : ${todayCount}` : '');
     }
 
-    // Summary
-    const historySummary = document.getElementById('historySummary');
-    if (historySummary) {
-        historySummary.textContent = `MONTH TOTAL : ${monthTotal} | TODAY : ${todayCount}`;
-    }
+    // Initial load
+    await updateHistory(currentMonthIndex);
+
+    monthSelect.addEventListener('change', async (e) => {
+        const selectedMonth = parseInt(monthSelect.value, 10);
+        await updateHistory(selectedMonth);
+    });
 });

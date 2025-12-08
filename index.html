@@ -10,11 +10,15 @@
     <script src="menu.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body>
+<body class="main-bg">
     <!-- Header -->
     <header class="app-header">
         <button id="menuToggle" class="menu-btn" aria-label="Open menu">
-            <span class="menu-icon"></span>
+            <span class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
         </button>
         <div class="header-title">Cigarette Counter</div>
     </header>
@@ -26,6 +30,7 @@
             <a href="account.html" class="menu-link">Account</a>
             <a href="#" id="logoutLink" class="menu-link logout-link">Log out</a>
         </nav>
+        <div class="menu-label">Cigarette Counter</div>
     </div>
     <div id="menuOverlay" class="menu-overlay"></div>
     <!-- Main Section -->

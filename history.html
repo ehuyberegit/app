@@ -10,10 +10,14 @@
     <script src="menu.js" defer></script>
     <script src="history.js" defer></script>
 </head>
-<body>
+<body class="main-bg">
     <header class="app-header">
         <button id="menuToggle" class="menu-btn" aria-label="Open menu">
-            <span class="menu-icon"></span>
+            <span class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
         </button>
         <div class="header-title">Cigarette Counter</div>
     </header>
@@ -24,12 +28,16 @@
             <a href="account.html" class="menu-link">Account</a>
             <a href="#" id="logoutLink" class="menu-link logout-link">Log out</a>
         </nav>
+        <div class="menu-label">Cigarette Counter</div>
     </div>
     <div id="menuOverlay" class="menu-overlay"></div>
     <div class="container">
         <main class="main-content">
-            <h1 class="title">How much has it been?</h1>
-            <div class="card">
+            <div class="history-header-row">
+                <span id="currentMonthLabel"></span>
+                <select id="monthSelect"></select>
+            </div>
+            <div class="history-card">
                 <div id="historyGrid"></div>
             </div>
             <div id="historySummary" style="margin-top: 18px; color: #fff; font-size: 1.1rem; text-align: center;"></div>
