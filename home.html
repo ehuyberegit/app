@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cigarette Counter</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Supabase + client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseClient.js"></script>
+
+    <!-- Logic compteur (incrément + undo + Supabase) -->
+    <script src="script.js" defer></script>
+
+    <!-- Menu + thème -->
     <script src="menu.js" defer></script>
     <script src="home.js" defer></script>
-    <script src="script.js" defer></script>
 </head>
 <body class="main-bg theme-standard">
-    <!-- Header -->
+    <!-- HEADER -->
     <header class="app-header">
         <button id="menuToggle" class="menu-btn" aria-label="Open menu">
             <span class="hamburger">
@@ -23,6 +30,8 @@
         </button>
         <div class="header-title">Cigarette Counter</div>
     </header>
+
+    <!-- SIDE MENU -->
     <div id="sideMenu" class="side-menu">
         <nav>
             <a href="home.html" class="menu-link">Home</a>
@@ -33,23 +42,35 @@
         <div class="menu-label">Cigarette Counter</div>
     </div>
     <div id="menuOverlay" class="menu-overlay"></div>
+
+    <!-- MAIN CONTENT -->
     <div class="container">
         <main class="main">
-            <!-- Theme Switch -->
+            <!-- Switch S/J -->
             <div class="theme-switch-row">
                 <button id="themeSwitch" class="theme-switch">S</button>
             </div>
+
+            <!-- Titre principal -->
             <div class="title-section">
                 <h1 class="title" id="mainTitle">
-                    ONE<br>
-                    MORE<br>
+                    ONE<br />
+                    MORE<br />
                     CIGGY ?
                 </h1>
             </div>
+
+            <!-- Bouton +1 -->
             <button class="counter-btn" id="incrementBtn">+1</button>
+
+            <!-- Bouton Undo -->
             <button class="undo-btn" id="undoBtn">Undo</button>
+
+            <!-- Footer / compteur -->
             <footer class="footer">
-                <p class="daily-count">DAILY COUNT : <span id="countValue">0</span></p>
+                <p class="daily-count">
+                    DAILY COUNT : <span id="countValue">0</span>
+                </p>
             </footer>
         </main>
     </div>

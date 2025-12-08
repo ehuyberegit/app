@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Hamburger menu logic
+    // Hambuger menu
     if (window.initMenu) window.initMenu();
 
-    // Theme switch logic
+    // Theme switch
     let isJoinMode = false;
     const body = document.body;
     const themeSwitch = document.getElementById('themeSwitch');
@@ -29,6 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initial theme
+    // Thème initial
     applyTheme();
 });
