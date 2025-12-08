@@ -35,6 +35,13 @@ html, body {
     height: 100%;
 }
 
+.app-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+}
+
 .cigarette-icon {
     width: 40px;
     height: 40px;
@@ -65,15 +72,16 @@ html, body {
 .title {
     font-size: 3.5rem;
     font-weight: 700;
-    text-align: center;
+    text-align: left;
     color: white;
     line-height: 1.1;
     letter-spacing: 0.02em;
+    padding-left: 32px;
 }
 
 .title .cigggi {
-    font-style: italic;
-    font-weight: 600;
+    font-style: normal;
+    font-weight: 700;
 }
 
 /* Counter Button */
@@ -104,6 +112,36 @@ html, body {
 .counter-btn:active {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Undo Button */
+.undo-btn {
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: white;
+    color: #F3B774;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    margin-top: 20px;
+}
+
+.undo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.undo-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Footer */
@@ -145,6 +183,13 @@ html, body {
         width: 50px;
         height: 50px;
     }
+
+    .undo-btn {
+        width: 90px;
+        height: 44px;
+        font-size: 0.95rem;
+        border-radius: 22px;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -162,5 +207,12 @@ html, body {
     .cigarette-icon {
         width: 60px;
         height: 60px;
+    }
+
+    .undo-btn {
+        width: 100px;
+        height: 48px;
+        font-size: 1rem;
+        border-radius: 24px;
     }
 }

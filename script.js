@@ -51,10 +51,25 @@ function addClickAnimation() {
     }, 150);
 }
 
+// Decrement counter and save to localStorage
+function undoCounter() {
+    const countValueElement = document.getElementById('countValue');
+    let currentCount = parseInt(countValueElement.textContent, 10);
+    
+    if (currentCount > 0) {
+        currentCount--;
+        countValueElement.textContent = currentCount;
+        localStorage.setItem(DAILY_COUNT_KEY, currentCount.toString());
+    }
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     initializeCounter();
 
     const incrementBtn = document.getElementById('incrementBtn');
     incrementBtn.addEventListener('click', incrementCounter);
+
+    const undoBtn = document.getElementById('undoBtn');
+    undoBtn.addEventListener('click', undoCounter);
 });
