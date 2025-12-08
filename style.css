@@ -1,0 +1,166 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Header Styles */
+.header {
+    background-color: #FFF2E3;
+    flex: 0 0 18%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.cigarette-icon {
+    width: 40px;
+    height: 40px;
+    display: block;
+}
+
+/* Main Section */
+.main {
+    background-color: #F3B774;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+}
+
+/* Title Section */
+.title-section {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: white;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+}
+
+.title .cigggi {
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* Counter Button */
+.counter-btn {
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    background-color: white;
+    color: #F3B774;
+    border: none;
+    font-size: 2.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    margin-bottom: 40px;
+}
+
+.counter-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.counter-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Footer */
+.footer {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.daily-count {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.1em;
+}
+
+#countValue {
+    font-weight: 700;
+    color: white;
+}
+
+/* Tablet and Desktop Adjustments */
+@media (min-width: 768px) {
+    .title {
+        font-size: 4.5rem;
+    }
+
+    .counter-btn {
+        width: 140px;
+        height: 140px;
+        font-size: 3rem;
+        border-radius: 70px;
+    }
+
+    .cigarette-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .title {
+        font-size: 5.5rem;
+    }
+
+    .counter-btn {
+        width: 160px;
+        height: 160px;
+        font-size: 3.5rem;
+        border-radius: 80px;
+    }
+
+    .cigarette-icon {
+        width: 60px;
+        height: 60px;
+    }
+}
