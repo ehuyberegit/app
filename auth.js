@@ -1,48 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const signupBtn = document.getElementById('signupBtn');
+    // Login logic
     const loginBtn = document.getElementById('loginBtn');
-    const loginMessage = document.getElementById('loginMessage');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', signIn);
+    }
+
+    // Signup logic
+    const signupBtn = document.getElementById('signupBtn');
+    if (signupBtn) {
+        signupBtn.addEventListener('click', signUp);
+    }
+
+    async function signIn() {
+        const email = document.getElementById('login-email')?.value.trim();
+        const password = document.getElementById('login-password')?.value;
+        const messageDiv = document.getElementById('loginMessage');
+        if (!email || !password) {
+            showMessage(messageDiv, 'Please enter email and password.');
+            return;
+        }
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+            showMessage(messageDiv, error.message);
+        } else {
+            window.location.href = 'index.html';
+        }
+    }
 
     async function signUp() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
+        const email = document.getElementById('signup-email')?.value.trim();
+        const password = document.getElementById('signup-password')?.value;
+        const messageDiv = document.getElementById('signupMessage');
         if (!email || !password) {
-            showMessage('Please enter email and password.');
+            showMessage(messageDiv, 'Please enter email and password.');
             return;
         }
         const { data, error } = await window.supabaseClient.auth.signUp({ email, password });
         if (error) {
-            showMessage(error.message);
+            showMessage(messageDiv, error.message);
         } else {
-            showMessage('Sign up successful! Please check your email to confirm.');
+            // On success, redirect to index.html (user may need to confirm email)
+            showMessage(messageDiv, 'Sign up successful! Please check your email to confirm.');
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1200);
         }
     }
 
-    async function signIn() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-        if (!email || !password) {
-            showMessage('Please enter email and password.');
-            return;
-        }
-        const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-            showMessage(error.message);
+    function showMessage(div, msg) {
+        if (div) {
+            div.textContent = msg;
+            div.style.display = 'block';
         } else {
-            window.location.href = 'index.html';
+            alert(msg);
         }
     }
-
-    function showMessage(msg) {
-        loginMessage.textContent = msg;
-        loginMessage.style.display = 'block';
-    }
-
-    signupBtn.addEventListener('click', signUp);
-    loginBtn.addEventListener('click', signIn);
 });

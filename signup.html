@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up - Cigarette Counter</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <main class="main" style="justify-content: center;">
+            <div class="login-box">
+                <h2 class="login-title">Create account</h2>
+                <input type="email" id="signup-email" placeholder="Email" class="login-input" autocomplete="username">
+                <input type="password" id="signup-password" placeholder="Password" class="login-input" autocomplete="new-password">
+                <button id="signupBtn" class="login-btn" style="margin-bottom: 16px;">Create account</button>
+                <div id="signupMessage" class="login-message"></div>
+                <div style="margin-top: 12px;">
+                    <a href="login.html" style="color: white; text-decoration: underline; font-size: 1rem; opacity: 0.85;">Already have an account? Log in</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
