@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Hambuger menu
+    // Hamburger menu logic
     if (window.initMenu) window.initMenu();
 
-    // Theme switch
+    // Theme switch logic
     let isJoinMode = false;
     const body = document.body;
     const themeSwitch = document.getElementById('themeSwitch');
@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
             body.classList.remove('theme-standard');
             body.classList.add('theme-join');
             themeSwitch.textContent = 'J';
-            mainTitle.innerHTML = 'ONE<br>MORE<br>JOIN ?';
+            mainTitle.innerHTML = 'ONE<br />MORE<br />JOIN ?';
         } else {
             body.classList.remove('theme-join');
             body.classList.add('theme-standard');
             themeSwitch.textContent = 'S';
-            mainTitle.innerHTML = 'ONE<br>MORE<br>CIGGY ?';
+            mainTitle.innerHTML = 'ONE<br />MORE<br />CIGGY ?';
         }
     }
 
@@ -29,6 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Thème initial
+    // Initial theme
     applyTheme();
 });
