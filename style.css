@@ -511,3 +511,25 @@ body.theme-join .theme-switch {
 .theme-switch:active {
     transform: scale(0.97);
 }
+/* --- Style des boutons et du hamburger en mode JOIN --- */
+
+/* Bouton +1 : texte vert */
+body.theme-join .counter-btn {
+    color: #2E8B57;              /* vert plus foncé */
+}
+
+/* Bouton Undo : texte vert */
+body.theme-join .undo-btn {
+    color: #2E8B57;
+}
+
+/* Icône hamburger : barres vertes */
+body.theme-join .menu-btn .hamburger span {
+    background: #2E8B57;
+}
+
+/* Switch déjà géré, mais on l’aligne avec le même vert */
+body.theme-join .theme-switch {
+    border-color: #2E8B57;
+    color: #2E8B57;
+}
