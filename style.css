@@ -1,3 +1,7 @@
+/* -------------------------
+   RESET & BASE
+-------------------------- */
+
 * {
     margin: 0;
     padding: 0;
@@ -10,12 +14,18 @@ html, body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* Global orange background for main pages */
-body, .main-bg {
-    background: #F3B774 !important;
+body {
     min-height: 100vh;
-    margin: 0;
 }
+
+/* Permet juste d’identifier les pages "main" si besoin */
+.main-bg {
+    min-height: 100vh;
+}
+
+/* -------------------------
+   LAYOUT GÉNÉRAL
+-------------------------- */
 
 .container {
     display: flex;
@@ -24,7 +34,84 @@ body, .main-bg {
     width: 100vw;
 }
 
-/* Header Styles */
+/* Main zone: la couleur vient des classes de thème plus bas */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    background-color: transparent;
+}
+
+/* On laisse le body gérer la couleur globale, mais on reflète aussi sur .main */
+body.theme-standard .main {
+    background-color: #F3B774;
+}
+body.theme-join .main {
+    background-color: #8BF781;
+}
+
+/* -------------------------
+   HEADER (NOUVELLE VERSION)
+-------------------------- */
+
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: flex;
+    align-items: center;
+    z-index: 100;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    margin-left: 16px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-btn .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.menu-btn .hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #F3B774;
+    border-radius: 2px;
+    margin: 3px 0;
+    transition: background 0.2s;
+}
+
+.header-title {
+    flex: 1;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 1px;
+}
+
+/* Ancien header (si encore utilisé sur d’autres pages) */
 .header {
     background-color: #FFF2E3;
     flex: 0 0 18%;
@@ -55,19 +142,91 @@ body, .main-bg {
     display: block;
 }
 
-/* Main Section */
-.main {
-    background-color: #F3B774;
-    flex: 1;
+/* -------------------------
+   SIDE MENU
+-------------------------- */
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 75vw;
+    max-width: 320px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.10);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    z-index: 200;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 20px;
+    padding-top: 60px;
 }
 
-/* Title Section */
+.side-menu.open {
+    transform: translateX(0);
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30,30,30,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 150;
+}
+
+.menu-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.menu-link {
+    display: block;
+    padding: 18px 28px;
+    color: #F3B774;
+    font-size: 1.15rem;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid #f3e2c0;
+    transition: background 0.15s;
+}
+
+.menu-link:last-child {
+    border-bottom: none;
+}
+
+.menu-link:hover {
+    background: #f3e2c0;
+}
+
+.logout-link {
+    color: #e74c3c;
+}
+
+.menu-label {
+    margin-top: auto;
+    padding: 18px 28px 12px 28px;
+    color: #222;
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0.7;
+    letter-spacing: 1px;
+}
+
+/* Décalage du contenu sous le header */
+.container, .main-content {
+    padding-top: 70px;
+}
+
+/* -------------------------
+   TITRE & BOUTONS HOME
+-------------------------- */
+
 .title-section {
     flex: 0 0 auto;
     display: flex;
@@ -91,7 +250,7 @@ body, .main-bg {
     font-weight: 700;
 }
 
-/* Counter Button */
+/* Bouton +1 */
 .counter-btn {
     width: 120px;
     height: 120px;
@@ -121,7 +280,7 @@ body, .main-bg {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Undo Button */
+/* Bouton Undo */
 .undo-btn {
     width: 80px;
     height: 40px;
@@ -151,7 +310,7 @@ body, .main-bg {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Footer */
+/* Footer compteur */
 .footer {
     position: absolute;
     bottom: 30px;
@@ -173,127 +332,10 @@ body, .main-bg {
     color: white;
 }
 
-/* Header */
-.app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    display: flex;
-    align-items: center;
-    z-index: 100;
-}
-.menu-btn {
-    background: none;
-    border: none;
-    margin-left: 16px;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.menu-btn .hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-}
-.menu-btn .hamburger span {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background: #F3B774;
-    border-radius: 2px;
-    margin: 3px 0;
-    transition: background 0.2s;
-}
-.header-title {
-    flex: 1;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #222;
-    letter-spacing: 1px;
-}
+/* -------------------------
+   CARDS GÉNÉRALES (history / account)
+-------------------------- */
 
-/* Side Menu */
-.side-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 75vw;
-    max-width: 320px;
-    height: 100vh;
-    background: #fff;
-    box-shadow: 2px 0 12px rgba(0,0,0,0.10);
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
-    z-index: 200;
-    display: flex;
-    flex-direction: column;
-    padding-top: 60px;
-}
-.side-menu.open {
-    transform: translateX(0);
-}
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(30,30,30,0.25);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    z-index: 150;
-}
-.menu-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-}
-.menu-link {
-    display: block;
-    padding: 18px 28px;
-    color: #F3B774;
-    font-size: 1.15rem;
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 1px solid #f3e2c0;
-    transition: background 0.15s;
-}
-.menu-link:last-child {
-    border-bottom: none;
-}
-.menu-link:hover {
-    background: #f3e2c0;
-}
-.logout-link {
-    color: #e74c3c;
-}
-.menu-label {
-    margin-top: auto;
-    padding: 18px 28px 12px 28px;
-    color: #222;
-    font-size: 0.95rem;
-    font-weight: 500;
-    opacity: 0.7;
-    letter-spacing: 1px;
-}
-
-/* Main content padding for header */
-.container, .main-content {
-    padding-top: 70px;
-}
-
-/* Card styles */
 .card, .history-card {
     background: #fff;
     border-radius: 18px;
@@ -305,7 +347,10 @@ body, .main-bg {
     text-align: center;
 }
 
-/* History page */
+/* -------------------------
+   HISTORY PAGE
+-------------------------- */
+
 .history-header-row {
     display: flex;
     align-items: center;
@@ -313,12 +358,14 @@ body, .main-bg {
     gap: 12px;
     margin-bottom: 12px;
 }
+
 #currentMonthLabel {
     color: #fff;
     font-size: 1.15rem;
     font-weight: 600;
     letter-spacing: 1px;
 }
+
 #monthSelect {
     border: none;
     border-radius: 18px;
@@ -331,11 +378,12 @@ body, .main-bg {
     outline: none;
     margin-left: 6px;
 }
+
 #monthSelect:focus {
     border: 1px solid #F3B774;
 }
 
-/* History grid */
+/* Grille des jours */
 #historyGrid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -343,11 +391,13 @@ body, .main-bg {
     margin: 18px 0 8px 0;
     justify-items: center;
 }
+
 .day-cell {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .day-circle {
     width: 38px;
     height: 38px;
@@ -365,11 +415,13 @@ body, .main-bg {
     margin-bottom: 2px;
     transition: background 0.2s, color 0.2s, border 0.2s;
 }
+
 .day-circle--active {
     background: #F3B774;
     color: #fff;
     border: 2px solid #F3B774;
 }
+
 .day-count {
     font-size: 0.85rem;
     color: #F3B774;
@@ -378,7 +430,63 @@ body, .main-bg {
     font-weight: 500;
 }
 
-/* Responsive */
+/* -------------------------
+   THEME SWITCH
+-------------------------- */
+
+.theme-switch-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+    margin-top: 8px;
+}
+
+.theme-switch {
+    width: 56px;
+    height: 32px;
+    background: #fff;
+    border: 2px solid #F3B774;
+    border-radius: 999px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #F3B774;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s, color 0.3s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+body.theme-join .theme-switch {
+    border-color: #8BF781;
+    color: #2E8B57;
+}
+
+.theme-switch:active {
+    transform: scale(0.97);
+}
+
+/* -------------------------
+   THÈMES (BODY)
+-------------------------- */
+
+body.theme-standard {
+    background-color: #F3B774;
+    transition: background-color 0.3s;
+}
+
+body.theme-join {
+    background-color: #8BF781;
+    transition: background-color 0.3s;
+}
+
+/* -------------------------
+   RESPONSIVE
+-------------------------- */
+
 @media (max-width: 500px) {
     .card, .history-card {
         padding: 16px 6px;
@@ -393,7 +501,6 @@ body, .main-bg {
     }
 }
 
-/* Tablet and Desktop Adjustments */
 @media (min-width: 768px) {
     .title {
         font-size: 4.5rem;
@@ -442,47 +549,4 @@ body, .main-bg {
         font-size: 1rem;
         border-radius: 24px;
     }
-}
-
-/* Theme classes */
-.theme-standard {
-    background: #F3B774 !important;
-    transition: background 0.3s;
-}
-.theme-join {
-    background: #8BF781 !important;
-    transition: background 0.3s;
-}
-
-/* Theme switch styles */
-.theme-switch-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 18px;
-    margin-top: 8px;
-}
-.theme-switch {
-    width: 56px;
-    height: 32px;
-    background: #fff;
-    border: 2px solid #F3B774;
-    border-radius: 999px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #F3B774;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.3s, color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-}
-.theme-join .theme-switch {
-    border-color: #8BF781;
-    color: #2E8B57;
-}
-.theme-switch:active {
-    transform: scale(0.97);
 }
