@@ -64,7 +64,20 @@ function undoCounter() {
 }
 
 // Event listeners
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Supabase auth check
+    if (window.supabaseClient) {
+        try {
+            const { data, error } = await window.supabaseClient.auth.getUser();
+            if (!data || !data.user) {
+                window.location.href = 'login.html';
+                return;
+            }
+        } catch (e) {
+            window.location.href = 'login.html';
+            return;
+        }
+    }
     initializeCounter();
 
     const incrementBtn = document.getElementById('incrementBtn');
