@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cigarette Counter</title>
+    <title>History - Cigarette Counter</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseClient.js"></script>
     <script src="menu.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="history.js" defer></script>
 </head>
 <body>
-    <!-- Header -->
     <header class="app-header">
         <button id="menuToggle" class="menu-btn" aria-label="Open menu">
             <span class="menu-icon"></span>
         </button>
         <div class="header-title">Cigarette Counter</div>
     </header>
-    <!-- Hamburger Menu -->
     <div id="sideMenu" class="side-menu">
         <nav>
             <a href="index.html" class="menu-link">Home</a>
@@ -28,21 +26,13 @@
         </nav>
     </div>
     <div id="menuOverlay" class="menu-overlay"></div>
-    <!-- Main Section -->
     <div class="container">
-        <main class="main">
-            <div class="title-section">
-                <h1 class="title">
-                    ONE<br>
-                    MORE<br>
-                    CIGGY ?
-                </h1>
+        <main class="main-content">
+            <h1 class="title">How much has it been?</h1>
+            <div class="card">
+                <div id="historyGrid"></div>
             </div>
-            <button class="counter-btn" id="incrementBtn">+1</button>
-            <button class="undo-btn" id="undoBtn">Undo</button>
-            <footer class="footer">
-                <p class="daily-count">DAILY COUNT : <span id="countValue">0</span></p>
-            </footer>
+            <div id="historySummary" style="margin-top: 18px; color: #fff; font-size: 1.1rem; text-align: center;"></div>
         </main>
     </div>
 </body>

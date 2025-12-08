@@ -10,6 +10,9 @@ function getTodayDate() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Hamburger menu logic (shared)
+  if (window.initMenu) window.initMenu();
+
   // Elements
   const countValueElement = document.getElementById('countValue');
   const incrementBtn = document.getElementById('incrementBtn');
