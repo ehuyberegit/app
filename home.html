@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cigarette Counter</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="menu.js" defer></script>
+    <script src="home.js" defer></script>
+</head>
+<body class="main-bg theme-standard">
+    <!-- Header -->
+    <header class="app-header">
+        <button id="menuToggle" class="menu-btn" aria-label="Open menu">
+            <span class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </button>
+        <div class="header-title">Cigarette Counter</div>
+    </header>
+    <div id="sideMenu" class="side-menu">
+        <nav>
+            <a href="home.html" class="menu-link">Home</a>
+            <a href="history.html" class="menu-link">History</a>
+            <a href="account.html" class="menu-link">Account</a>
+            <a href="#" id="logoutLink" class="menu-link logout-link">Log out</a>
+        </nav>
+        <div class="menu-label">Cigarette Counter</div>
+    </div>
+    <div id="menuOverlay" class="menu-overlay"></div>
+    <div class="container">
+        <main class="main">
+            <!-- Theme Switch -->
+            <div class="theme-switch-row">
+                <button id="themeSwitch" class="theme-switch">S</button>
+            </div>
+            <div class="title-section">
+                <h1 class="title" id="mainTitle">
+                    ONE<br>
+                    MORE<br>
+                    CIGGY ?
+                </h1>
+            </div>
+            <button class="counter-btn" id="incrementBtn">+1</button>
+            <button class="undo-btn" id="undoBtn">Undo</button>
+            <footer class="footer">
+                <p class="daily-count">DAILY COUNT : <span id="countValue">0</span></p>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

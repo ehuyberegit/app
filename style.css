@@ -443,3 +443,46 @@ body, .main-bg {
         border-radius: 24px;
     }
 }
+
+/* Theme classes */
+.theme-standard {
+    background: #F3B774 !important;
+    transition: background 0.3s;
+}
+.theme-join {
+    background: #8BF781 !important;
+    transition: background 0.3s;
+}
+
+/* Theme switch styles */
+.theme-switch-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+    margin-top: 8px;
+}
+.theme-switch {
+    width: 56px;
+    height: 32px;
+    background: #fff;
+    border: 2px solid #F3B774;
+    border-radius: 999px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #F3B774;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+.theme-join .theme-switch {
+    border-color: #8BF781;
+    color: #2E8B57;
+}
+.theme-switch:active {
+    transform: scale(0.97);
+}
