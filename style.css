@@ -486,17 +486,3 @@ body, .main-bg {
 .theme-switch:active {
     transform: scale(0.97);
 }
-/* On déporte la couleur de fond principale sur .main */
-.main {
-    /* supprime ici tout background-color orange si tu en as un */
-    background-color: transparent;
-}
-
-/* Fond principal selon le thème */
-.theme-standard .main {
-    background-color: #F3B774;
-}
-
-.theme-join .main {
-    background-color: #8BF781;
-}
