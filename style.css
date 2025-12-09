@@ -172,11 +172,6 @@ body.theme-join {
     letter-spacing: 0.1em;
 }
 
-#countValue {
-    font-weight: 700;
-    color: white;
-}
-
 /* Header */
 .app-header {
     position: fixed;
@@ -454,12 +449,12 @@ body.theme-join {
 }
 
 #countValueJ {
-  color: #2ecc40;
+  color: white;
   font-weight: bold;
   margin-left: 0.5em;
 }
 #countValue {
-  color: orange;
+  color: white !important;
   font-weight: bold;
   margin-left: 0.5em;
 }
@@ -467,6 +462,10 @@ body.theme-join {
   color: #333;
   font-weight: bold;
   margin-left: 0.5em;
+}
+.history-count-value {
+  color: orange;
+  font-weight: bold;
 }
 
 /* Responsive */
@@ -614,4 +613,3 @@ body.theme-join .theme-switch {
     border-color: #8BF781 !important;
     color: #8BF781 !important;
 }
-

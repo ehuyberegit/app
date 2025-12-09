@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (window.initMenu) window.initMenu();
 
   // Elements
+  const themeSwitch = document.getElementById('themeSwitch');
+  const mainTitle = document.getElementById('mainTitle');
   const countValueElement = document.getElementById('countValue');
   const countValueJElement = document.getElementById('countValueJ');
   const totalValueElement = document.getElementById('totalValue');
@@ -55,7 +57,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   let currentCounts = { C: 0, J: 0 };
   let currentRowIds = { C: null, J: null };
 
-  async function loadDailyCounts() {
+  function applyTheme() {
+    document.body.classList.remove('theme-standard', 'theme-join');
+    document.body.classList.add(
+      activeConsumable === 'J' ? 'theme-join' : 'theme-standard'
+    );
+    if (themeSwitch) {
+      themeSwitch.textContent = activeConsumable === 'J' ? 'J' : 'C';
+    }
+    if (mainTitle) {
+      mainTitle.innerHTML =
+        activeConsumable === 'J'
+          ? 'ONE<br />MORE<br />JOIN ?'
+          : 'ONE<br />MORE<br />CIGGY ?';
+    }
+  }
+
+  async function loadDailyCountsForToday() {
     try {
       const { data, error } = await window.supabaseClient
         .from('daily_counts')
@@ -80,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
       updateUI();
+      applyTheme();
     } catch (e) {
       console.error('Exception while loading daily counts:', e);
     }
@@ -130,8 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       btnC.classList.toggle('active', activeConsumable === 'C');
       btnJ.classList.toggle('active', activeConsumable === 'J');
     }
-    document.body.classList.toggle('theme-standard', activeConsumable === 'C');
-    document.body.classList.toggle('theme-join', activeConsumable === 'J');
   }
 
   function addClickAnimation() {
@@ -160,15 +177,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function setActiveConsumable(cid) {
     activeConsumable = cid;
+    applyTheme();
     updateUI();
   }
 
-  if (btnC) btnC.addEventListener('click', () => setActiveConsumable('C'));
-  if (btnJ) btnJ.addEventListener('click', () => setActiveConsumable('J'));
+  function switchToC() {
+    setActiveConsumable('C');
+  }
+
+  function switchToJ() {
+    setActiveConsumable('J');
+  }
+
+  if (btnC) btnC.addEventListener('click', switchToC);
+  if (btnJ) btnJ.addEventListener('click', switchToJ);
+  if (themeSwitch) {
+    themeSwitch.addEventListener('click', () => {
+      if (activeConsumable === 'C') {
+        switchToJ();
+      } else {
+        switchToC();
+      }
+    });
+  }
 
   // --- 5. Init ---
 
-  await loadDailyCounts();
+  applyTheme();
+  await loadDailyCountsForToday();
 
   if (incrementBtn) {
     incrementBtn.addEventListener('click', handleIncrement);
