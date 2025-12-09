@@ -91,10 +91,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.className = 'history-card';
             card.innerHTML = `
                 <div class="history-date">${date}</div>
-                <div class="history-counts">
-                    <span class="count-c">${counts.C || 0} C</span>
-                    <span class="count-j">${counts.J || 0} J</span>
-                    <span class="count-total">Total: ${total}</span>
+                <div class="history-counts-col">
+                    <div class="count-c">Cigarettes : ${counts.C || 0}</div>
+                    <div class="count-j">Joints : ${counts.J || 0}</div>
+                    <div class="count-total">Total jour : ${total}</div>
                 </div>
             `;
             historyGrid.appendChild(card);
