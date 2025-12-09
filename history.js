@@ -64,6 +64,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             .lte('date', endDate)
             .order('date', { ascending: true });
 
+        if (error) {
+            console.error('Error loading history:', error);
+        }
+        if (!Array.isArray(data)) {
+            console.warn('No history data found for this month.');
+        }
+
         const countsByDay = {};
         let monthTotal = 0;
         let todayCount = 0;

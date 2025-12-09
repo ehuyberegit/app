@@ -58,8 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .eq('date', today)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
-        // PGRST116 = no rows, with maybeSingle => treat as no data
+      if (error) {
         console.error('Error loading daily count:', error);
       }
 
@@ -67,9 +66,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // No row for today -> start at 0
         currentRowId = null;
         currentCount = 0;
+        console.log('No daily count found for today, will insert on first increment.');
       } else {
         currentRowId = data.id;
         currentCount = data.count || 0;
+        console.log('Loaded daily count:', currentCount);
       }
 
       if (countValueElement) {
@@ -104,6 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           return;
         }
         currentRowId = data.id;
+        console.log('Inserted new daily count:', currentCount);
       } else {
         // Row already exists -> update
         const { error } = await window.supabaseClient
@@ -113,6 +115,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (error) {
           console.error('Error updating daily count:', error);
+        } else {
+          console.log('Updated daily count:', currentCount);
         }
       }
     } catch (e) {
