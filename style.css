@@ -45,14 +45,8 @@ body, .main-bg {
 .app-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #333;
+    color: #e0dede;
     text-align: center;
-}
-
-.cigarette-icon {
-    width: 40px;
-    height: 40px;
-    display: block;
 }
 
 /* Main Section */
@@ -286,7 +280,7 @@ body.theme-join {
     background: #f3e2c0;
 }
 .logout-link {
-    color: #e74c3c;
+    color: #222;
 }
 .menu-label {
     margin-top: auto;
@@ -474,7 +468,7 @@ body.theme-join .main {
 
 /* Ajuster le style du switch */
 body.theme-join .theme-switch {
-    border-color: #2E8B57;
+    border-color: #8BF781;
     color: #2E8B57;
 }
 
@@ -506,7 +500,7 @@ body.theme-join .theme-switch {
 }
 body.theme-join .theme-switch {
     border-color: #8BF781;
-    color: #2E8B57;
+    color: #8BF781;
 }
 .theme-switch:active {
     transform: scale(0.97);
@@ -515,22 +509,22 @@ body.theme-join .theme-switch {
 
 /* Bouton +1 : texte vert */
 body.theme-join .counter-btn {
-    color: #2E8B57 !important;
+    color: #8BF781 !important;
 }
 
 /* Bouton Undo : texte vert */
 body.theme-join .undo-btn {
-    color: #2E8B57 !important;
+    color: #8BF781 !important;
 }
 
 /* Icône hamburger : barres vertes */
 body.theme-join .menu-btn .hamburger span {
-    background: #2E8B57 !important;
+    background: #8BF781 !important;
 }
 
 /* Switch : même vert */
 body.theme-join .theme-switch {
-    border-color: #2E8B57 !important;
-    color: #2E8B57 !important;
+    border-color: #8BF781 !important;
+    color: #8BF781 !important;
 }
 

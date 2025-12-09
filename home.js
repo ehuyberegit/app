@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             body.classList.remove('theme-join');
             body.classList.add('theme-standard');
-            themeSwitch.textContent = 'S';
+            themeSwitch.textContent = 'C';
             mainTitle.innerHTML = 'ONE<br />MORE<br />CIGGY ?';
         }
     }
