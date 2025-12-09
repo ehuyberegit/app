@@ -102,10 +102,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (error) {
           console.error('Error inserting daily count:', error);
+          console.error('Insert response:', { data, error });
           return;
         }
-        currentRowId = data.id;
-        console.log('Inserted new daily count:', currentCount);
+        if (!data || !data.id) {
+          console.error('Insert did not return row ID:', data);
+        } else {
+          currentRowId = data.id;
+          console.log('Inserted new daily count:', currentCount, 'Row:', data);
+        }
       } else {
         // Row already exists -> update
         const { error } = await window.supabaseClient
