@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const { data, error } = await window.supabaseClient
             .from('daily_counts')
-            .select('date, count')
+            .select('date, count, consumable_id')
             .eq('user_id', currentUser.id)
             .gte('date', startDate)
             .lte('date', endDate)
@@ -71,57 +71,51 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.warn('No history data found for this month.');
         }
 
-        const countsByDay = {};
-        let monthTotal = 0;
-        let todayCount = 0;
+        // Grouper par date
+        const days = {};
         if (Array.isArray(data)) {
             for (const row of data) {
-                const d = new Date(row.date).getDate();
-                countsByDay[d] = row.count;
-                monthTotal += row.count || 0;
-                // Today count
-                const today = new Date();
-                if (
-                    today.getFullYear() === year &&
-                    today.getMonth() === monthIndex &&
-                    today.getDate() === d
-                ) {
-                    todayCount = row.count || 0;
-                }
+                const d = row.date;
+                if (!days[d]) days[d] = { C: 0, J: 0 };
+                days[d][row.consumable_id] = row.count || 0;
             }
         }
-        return { countsByDay, monthTotal, todayCount };
+        return days;
     }
 
-    function renderHistoryGrid(year, monthIndex, countsByDay) {
-        const daysInMonth = getDaysInMonth(year, monthIndex);
+    function renderHistoryGrid(days) {
         historyGrid.innerHTML = '';
-        for (let d = 1; d <= daysInMonth; d++) {
-            const count = countsByDay[d] || 0;
-            const cell = document.createElement('div');
-            cell.className = 'day-cell';
-
-            const circle = document.createElement('div');
-            circle.className = 'day-circle' + (count > 0 ? ' day-circle--active' : '');
-            circle.textContent = d;
-
-            cell.appendChild(circle);
-
-            if (count > 0) {
-                const countDiv = document.createElement('div');
-                countDiv.className = 'day-count';
-                countDiv.textContent = count;
-                cell.appendChild(countDiv);
-            }
-            historyGrid.appendChild(cell);
-        }
+        Object.entries(days).forEach(([date, counts]) => {
+            const total = (counts.C || 0) + (counts.J || 0);
+            const card = document.createElement('div');
+            card.className = 'history-card';
+            card.innerHTML = `
+                <div class="history-date">${date}</div>
+                <div class="history-counts">
+                    <span class="count-c">${counts.C || 0} C</span>
+                    <span class="count-j">${counts.J || 0} J</span>
+                    <span class="count-total">Total: ${total}</span>
+                </div>
+            `;
+            historyGrid.appendChild(card);
+        });
     }
 
     async function updateHistory(monthIndex) {
         currentMonthLabel.textContent = `${MONTHS[monthIndex]} ${currentYear}`;
-        const { countsByDay, monthTotal, todayCount } = await loadHistoryForMonth(currentYear, monthIndex);
-        renderHistoryGrid(currentYear, monthIndex, countsByDay);
-        historySummary.textContent = `MONTH TOTAL : ${monthTotal}` + (monthIndex === (new Date()).getMonth() ? ` | TODAY : ${todayCount}` : '');
+        const days = await loadHistoryForMonth(currentYear, monthIndex);
+        renderHistoryGrid(days);
+        // Calcul du total du mois
+        let monthTotal = 0;
+        let todayTotal = 0;
+        const todayStr = getTodayDate();
+        Object.entries(days).forEach(([date, counts]) => {
+            monthTotal += (counts.C || 0) + (counts.J || 0);
+            if (date === todayStr) {
+                todayTotal = (counts.C || 0) + (counts.J || 0);
+            }
+        });
+        historySummary.textContent = `MONTH TOTAL : ${monthTotal}` + (monthIndex === (new Date()).getMonth() ? ` | TODAY : ${todayTotal}` : '');
     }
 
     // Initial load

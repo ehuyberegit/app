@@ -309,6 +309,41 @@ body.theme-join {
     text-align: center;
 }
 
+/* History cards redesign */
+.history-card {
+  background: #fff;
+  border-radius: 12px;
+  margin: 1.2em 0;
+  padding: 1em 1.5em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+.history-date {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 0.3em;
+}
+.history-counts {
+  display: flex;
+  gap: 1.5em;
+  align-items: center;
+}
+.count-c {
+  color: orange;
+  font-weight: bold;
+}
+.count-j {
+  color: #2ecc40;
+  font-weight: bold;
+}
+.count-total {
+  margin-left: auto;
+  font-size: 1em;
+  color: #333;
+}
+
 /* History page */
 .history-header-row {
     display: flex;
@@ -380,6 +415,51 @@ body.theme-join {
     opacity: 0.8;
     margin-top: 2px;
     font-weight: 500;
+}
+
+/* Toggle C/J */
+.consumable-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 1.5em;
+}
+.toggle-btn {
+  border: none;
+  background: #fff;
+  color: #F3B774;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.toggle-btn--c.active, .toggle-btn--c:focus {
+  background: #F3B774;
+  color: #fff;
+}
+.toggle-btn--j.active, .toggle-btn--j:focus {
+  background: #8BF781;
+  color: #fff;
+}
+
+#countValueJ {
+  color: #2ecc40;
+  font-weight: bold;
+  margin-left: 0.5em;
+}
+#countValue {
+  color: orange;
+  font-weight: bold;
+  margin-left: 0.5em;
+}
+#totalValue {
+  color: #333;
+  font-weight: bold;
+  margin-left: 0.5em;
 }
 
 /* Responsive */
@@ -469,7 +549,7 @@ body.theme-join .main {
 /* Ajuster le style du switch */
 body.theme-join .theme-switch {
     border-color: #8BF781;
-    color: #2E8B57;
+    color: #8BF781;
 }
 
 

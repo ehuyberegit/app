@@ -15,8 +15,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Elements
   const countValueElement = document.getElementById('countValue');
+  const countValueJElement = document.getElementById('countValueJ');
+  const totalValueElement = document.getElementById('totalValue');
   const incrementBtn = document.getElementById('incrementBtn');
   const undoBtn = document.getElementById('undoBtn');
+  const btnC = document.getElementById('btnC');
+  const btnJ = document.getElementById('btnJ');
 
   if (!window.supabaseClient) {
     console.error('Supabase client not found');
@@ -46,82 +50,68 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- 2. State for today ---
 
   const today = getTodayDate();
-  let currentRowId = null;
-  let currentCount = 0;
+  const consumableIds = ['C', 'J'];
+  let activeConsumable = 'C';
+  let currentCounts = { C: 0, J: 0 };
+  let currentRowIds = { C: null, J: null };
 
-  async function loadDailyCount() {
+  async function loadDailyCounts() {
     try {
       const { data, error } = await window.supabaseClient
         .from('daily_counts')
-        .select('id, count')
+        .select('id, count, consumable_id')
         .eq('user_id', currentUser.id)
-        .eq('date', today)
-        .maybeSingle();
+        .eq('date', today);
 
       if (error) {
-        console.error('Error loading daily count:', error);
+        console.error('Error loading daily counts:', error);
       }
 
-      if (!data) {
-        // No row for today -> start at 0
-        currentRowId = null;
-        currentCount = 0;
-        console.log('No daily count found for today, will insert on first increment.');
-      } else {
-        currentRowId = data.id;
-        currentCount = data.count || 0;
-        console.log('Loaded daily count:', currentCount);
-      }
+      currentCounts = { C: 0, J: 0 };
+      currentRowIds = { C: null, J: null };
 
-      if (countValueElement) {
-        countValueElement.textContent = String(currentCount);
+      if (Array.isArray(data)) {
+        for (const row of data) {
+          const cid = row.consumable_id;
+          if (consumableIds.includes(cid)) {
+            currentCounts[cid] = row.count || 0;
+            currentRowIds[cid] = row.id;
+          }
+        }
       }
+      updateUI();
     } catch (e) {
-      console.error('Exception while loading daily count:', e);
-      currentRowId = null;
-      currentCount = 0;
-      if (countValueElement) {
-        countValueElement.textContent = '0';
-      }
+      console.error('Exception while loading daily counts:', e);
     }
   }
 
-  async function saveDailyCount() {
+  async function saveDailyCount(consumableId) {
     try {
-      if (currentRowId === null) {
-        // First time today -> insert
+      if (currentRowIds[consumableId] === null) {
+        // Insert
         const { data, error } = await window.supabaseClient
           .from('daily_counts')
           .insert({
             user_id: currentUser.id,
             date: today,
-            count: currentCount,
+            consumable_id: consumableId,
+            count: currentCounts[consumableId],
           })
           .select()
           .single();
-
         if (error) {
           console.error('Error inserting daily count:', error);
-          console.error('Insert response:', { data, error });
           return;
         }
-        if (!data || !data.id) {
-          console.error('Insert did not return row ID:', data);
-        } else {
-          currentRowId = data.id;
-          console.log('Inserted new daily count:', currentCount, 'Row:', data);
-        }
+        currentRowIds[consumableId] = data.id;
       } else {
-        // Row already exists -> update
+        // Update
         const { error } = await window.supabaseClient
           .from('daily_counts')
-          .update({ count: currentCount })
-          .eq('id', currentRowId);
-
+          .update({ count: currentCounts[consumableId] })
+          .eq('id', currentRowIds[consumableId]);
         if (error) {
           console.error('Error updating daily count:', error);
-        } else {
-          console.log('Updated daily count:', currentCount);
         }
       }
     } catch (e) {
@@ -132,9 +122,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- 3. UI helpers ---
 
   function updateUI() {
-    if (countValueElement) {
-      countValueElement.textContent = String(currentCount);
+    if (countValueElement) countValueElement.textContent = String(currentCounts['C']);
+    if (countValueJElement) countValueJElement.textContent = String(currentCounts['J']);
+    if (totalValueElement) totalValueElement.textContent = String(currentCounts['C'] + currentCounts['J']);
+    // Style toggle
+    if (btnC && btnJ) {
+      btnC.classList.toggle('active', activeConsumable === 'C');
+      btnJ.classList.toggle('active', activeConsumable === 'J');
     }
+    document.body.classList.toggle('theme-standard', activeConsumable === 'C');
+    document.body.classList.toggle('theme-join', activeConsumable === 'J');
   }
 
   function addClickAnimation() {
@@ -148,22 +145,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- 4. Button handlers ---
 
   async function handleIncrement() {
-    currentCount += 1;
+    currentCounts[activeConsumable] += 1;
     updateUI();
     addClickAnimation();
-    await saveDailyCount();
+    await saveDailyCount(activeConsumable);
   }
 
   async function handleUndo() {
-    if (currentCount <= 0) return;
-    currentCount -= 1;
+    if (currentCounts[activeConsumable] <= 0) return;
+    currentCounts[activeConsumable] -= 1;
     updateUI();
-    await saveDailyCount();
+    await saveDailyCount(activeConsumable);
   }
+
+  function setActiveConsumable(cid) {
+    activeConsumable = cid;
+    updateUI();
+  }
+
+  if (btnC) btnC.addEventListener('click', () => setActiveConsumable('C'));
+  if (btnJ) btnJ.addEventListener('click', () => setActiveConsumable('J'));
 
   // --- 5. Init ---
 
-  await loadDailyCount();
+  await loadDailyCounts();
 
   if (incrementBtn) {
     incrementBtn.addEventListener('click', handleIncrement);
