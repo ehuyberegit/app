@@ -141,9 +141,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- 3. UI helpers ---
 
   function updateUI() {
-    if (countValueElement) countValueElement.textContent = String(currentCounts['C']);
+    const totalCount = currentCounts['C'] + currentCounts['J'];
+    const hasPerConsumableDisplay = Boolean(countValueJElement || totalValueElement);
+    if (countValueElement) {
+      // If the page shows per-consumable fields, keep C here; otherwise treat it as the daily total.
+      const valueToShow = hasPerConsumableDisplay ? currentCounts['C'] : totalCount;
+      countValueElement.textContent = String(valueToShow);
+    }
     if (countValueJElement) countValueJElement.textContent = String(currentCounts['J']);
-    if (totalValueElement) totalValueElement.textContent = String(currentCounts['C'] + currentCounts['J']);
+    if (totalValueElement) totalValueElement.textContent = String(totalCount);
     // Style toggle
     if (btnC && btnJ) {
       btnC.classList.toggle('active', activeConsumable === 'C');

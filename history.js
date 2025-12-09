@@ -17,6 +17,12 @@ function getDaysInMonth(year, monthIndex) {
 function formatDate(year, monthIndex, day) {
     return `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
+function formatDisplayDate(dateStr) {
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    const [y, m, d] = parts;
+    return `${d}/${m}/${y}`;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.initMenu) window.initMenu();
@@ -35,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // DOM elements
     const monthSelect = document.getElementById('monthSelect');
     const currentMonthLabel = document.getElementById('currentMonthLabel');
-    const historyGrid = document.getElementById('historyGrid');
+    const historyList = document.getElementById('historyList');
     const historySummary = document.getElementById('historySummary');
 
     // Setup month select
@@ -77,34 +83,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             for (const row of data) {
                 const d = row.date;
                 if (!days[d]) days[d] = { C: 0, J: 0 };
-                days[d][row.consumable_id] = row.count || 0;
+                const cid = row.consumable_id;
+                const value = row.count || 0;
+                if (cid === 'C' || cid === 'J') {
+                    days[d][cid] = (days[d][cid] || 0) + value;
+                }
             }
         }
         return days;
     }
 
-    function renderHistoryGrid(days) {
-        historyGrid.innerHTML = '';
+    function renderHistoryList(days) {
+        if (!historyList) return;
+        historyList.innerHTML = '';
         Object.entries(days).forEach(([date, counts]) => {
             const total = (counts.C || 0) + (counts.J || 0);
             const card = document.createElement('div');
             card.className = 'history-card';
             card.innerHTML = `
-                <div class="history-date">${date}</div>
+                <div class="history-date">${formatDisplayDate(date)}</div>
                 <div class="history-counts-col">
                     <div class="count-c">Cigarettes : ${counts.C || 0}</div>
                     <div class="count-j">Joints : ${counts.J || 0}</div>
-                    <div class="count-total">Total jour : ${total}</div>
+                    <div class="count-total">Total : ${total}</div>
                 </div>
             `;
-            historyGrid.appendChild(card);
+            historyList.appendChild(card);
         });
     }
 
     async function updateHistory(monthIndex) {
         currentMonthLabel.textContent = `${MONTHS[monthIndex]} ${currentYear}`;
         const days = await loadHistoryForMonth(currentYear, monthIndex);
-        renderHistoryGrid(days);
+        renderHistoryList(days);
         // Calcul du total du mois
         let monthTotal = 0;
         let todayTotal = 0;
@@ -115,7 +126,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 todayTotal = (counts.C || 0) + (counts.J || 0);
             }
         });
-        historySummary.textContent = `MONTH TOTAL : ${monthTotal}` + (monthIndex === (new Date()).getMonth() ? ` | TODAY : ${todayTotal}` : '');
+        if (historySummary) {
+            historySummary.textContent = `MONTH TOTAL : ${monthTotal}` + (monthIndex === (new Date()).getMonth() ? ` | TODAY : ${todayTotal}` : '');
+        }
     }
 
     // Initial load
