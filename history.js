@@ -82,12 +82,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (Array.isArray(data)) {
             for (const row of data) {
                 const d = row.date;
-                if (!days[d]) days[d] = { C: 0, J: 0 };
+                if (!days[d]) days[d] = { countC: 0, countJ: 0, total: 0 };
                 const cid = row.consumable_id;
                 const value = row.count || 0;
-                if (cid === 'C' || cid === 'J') {
-                    days[d][cid] = (days[d][cid] || 0) + value;
-                }
+                if (cid === 'C') days[d].countC += value;
+                if (cid === 'J') days[d].countJ += value;
+                days[d].total = days[d].countC + days[d].countJ;
             }
         }
         return days;
@@ -109,22 +109,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         for (let day = 1; day <= daysInMonth; day++) {
             const dateStr = formatDate(year, monthIndex, day);
-            const counts = days[dateStr] || { C: 0, J: 0 };
-            const total = (counts.C || 0) + (counts.J || 0);
+            const stats = days[dateStr] || { countC: 0, countJ: 0, total: 0 };
 
             const cell = document.createElement('div');
             cell.className = 'day-cell';
 
             const circle = document.createElement('div');
-            circle.className = 'day-circle' + (total > 0 ? ' day-circle--active' : '');
+            circle.className = 'day-circle' + (stats.total > 0 ? ' day-circle--active' : '');
             circle.textContent = day;
 
-            const dayCount = document.createElement('div');
-            dayCount.className = 'day-count';
-            dayCount.textContent = total > 0 ? total : '';
+            const statsRow = document.createElement('div');
+            statsRow.className = 'day-stats-mini';
+            statsRow.innerHTML = `
+                <span class="day-total">T=${stats.total}</span>
+                <span class="day-c">C=${stats.countC}</span>
+                <span class="day-j">J=${stats.countJ}</span>
+            `;
 
             cell.appendChild(circle);
-            cell.appendChild(dayCount);
+            cell.appendChild(statsRow);
             historyGrid.appendChild(cell);
         }
     }
@@ -138,9 +141,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         let todayTotal = 0;
         const todayStr = getTodayDate();
         Object.entries(days).forEach(([date, counts]) => {
-            monthTotal += (counts.C || 0) + (counts.J || 0);
+            monthTotal += (counts.total || 0);
             if (date === todayStr) {
-                todayTotal = (counts.C || 0) + (counts.J || 0);
+                todayTotal = (counts.total || 0);
             }
         });
         if (historySummary) {
