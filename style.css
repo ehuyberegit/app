@@ -446,6 +446,42 @@ body.theme-join {
     color: #2ecc40;
     font-weight: 600;
 }
+/* Petit bandeau de stats sous chaque jour du calendrier */
+.day-stats-mini {
+    margin-top: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9); /* pastille blanche pour le contraste */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Total du jour */
+.day-total {
+    color: #333;            /* bien lisible */
+}
+
+/* Cigarettes */
+.day-c {
+    color: #F3B774;         /* ton orange */
+}
+
+/* Joints */
+.day-j {
+    color: #2ecc40;         /* vert pour J */
+}
+
+/* Optionnel : accentuer visuellement les jours où il y a conso */
+.day-circle--active {
+    background: #fff;
+    color: #F3B774;
+    border: 2px solid #F3B774;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
 
 /* Toggle C/J */
 .consumable-toggle {
