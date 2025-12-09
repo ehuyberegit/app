@@ -41,12 +41,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // DOM elements
     const monthSelect = document.getElementById('monthSelect');
     const currentMonthLabel = document.getElementById('currentMonthLabel');
-    const historyList = document.getElementById('historyList');
+    const historyGrid = document.getElementById('historyGrid');
     const historySummary = document.getElementById('historySummary');
 
     // Setup month select
     const now = new Date();
-    const currentYear = now.getFullYear();
+    let currentYear = now.getFullYear();
     let currentMonthIndex = now.getMonth();
 
     MONTHS.forEach((name, idx) => {
@@ -93,29 +93,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         return days;
     }
 
-    function renderHistoryList(days) {
-        if (!historyList) return;
-        historyList.innerHTML = '';
-        Object.entries(days).forEach(([date, counts]) => {
+    function renderHistoryGrid(days, year, monthIndex) {
+        if (!historyGrid) return;
+        historyGrid.innerHTML = '';
+
+        const daysInMonth = getDaysInMonth(year, monthIndex);
+        const firstDayOffset = new Date(year, monthIndex, 1).getDay(); // 0 (Sun) - 6 (Sat)
+
+        // Pad empty cells before the first day to align the grid
+        for (let i = 0; i < firstDayOffset; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'day-cell';
+            historyGrid.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = formatDate(year, monthIndex, day);
+            const counts = days[dateStr] || { C: 0, J: 0 };
             const total = (counts.C || 0) + (counts.J || 0);
-            const card = document.createElement('div');
-            card.className = 'history-card';
-            card.innerHTML = `
-                <div class="history-date">${formatDisplayDate(date)}</div>
-                <div class="history-counts-col">
-                    <div class="count-c">Cigarettes : ${counts.C || 0}</div>
-                    <div class="count-j">Joints : ${counts.J || 0}</div>
-                    <div class="count-total">Total : ${total}</div>
-                </div>
-            `;
-            historyList.appendChild(card);
-        });
+
+            const cell = document.createElement('div');
+            cell.className = 'day-cell';
+
+            const circle = document.createElement('div');
+            circle.className = 'day-circle' + (total > 0 ? ' day-circle--active' : '');
+            circle.textContent = day;
+
+            const dayCount = document.createElement('div');
+            dayCount.className = 'day-count';
+            dayCount.textContent = total > 0 ? total : '';
+
+            cell.appendChild(circle);
+            cell.appendChild(dayCount);
+            historyGrid.appendChild(cell);
+        }
     }
 
     async function updateHistory(monthIndex) {
         currentMonthLabel.textContent = `${MONTHS[monthIndex]} ${currentYear}`;
         const days = await loadHistoryForMonth(currentYear, monthIndex);
-        renderHistoryList(days);
+        renderHistoryGrid(days, currentYear, monthIndex);
         // Calcul du total du mois
         let monthTotal = 0;
         let todayTotal = 0;
